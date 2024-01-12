@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1><i class="fas fa-image"></i> Diabetes Retinopathy Prediction</h1>
+    <hr>
+
+    <form class="mt-4 mb-4" action="/" method="post" enctype="multipart/form-data" onsubmit="showLoader()">
+        <div class="input-group mb-3 d-flex justify-content-center">
+            <input type="file" name="file" class="form-control" id="fileInput" aria-label="Choose file" accept=".png, .jpg, .jpeg" onchange="showImagePreview()">
+            <label class="input-group-text" for="fileInput">
+                <i class="fas fa-upload"></i> Choose File
+            </label>
+        </div>
+
+        <div id="imagePreview" class="bg-light p-3 rounded mt-3" style="display: none; border: 2px solid #007BFF;">
+            <img id="preview" class="img-fluid rounded" alt="Image Preview">
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="fas fa-cloud-upload-alt"></i> Upload
+        </button>
+    </form>
+
+    <div id="loader" style="display: none;">
+        <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+        <p class="mt-2">Processing...</p>
+    </div>
+
+    {% if prediction %}
+        <div class="alert alert-info mt-3">
+            <strong>Prediction:</strong> {{ prediction }}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function showImagePreview() {
+        var fileInput = document.getElementById('fileInput');
+        var preview = document.getElementById('preview');
+        var imagePreview = document.getElementById('imagePreview');
+
+        if (fileInput.files && fileInput.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+
+    function showLoader() {
+        document.getElementById('loader').style.display = 'block';
+    }
+</script>
+
+{% endblock %}
